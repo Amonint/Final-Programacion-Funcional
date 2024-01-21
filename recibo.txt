@@ -1,0 +1,7 @@
+
+----- Recibo de Transacción -----
+Nombre: Carlos López
+Fecha: 20/1/2024
+Saldo Anterior: $-534.00
+Saldo Nuevo: $66.00
+--------------------------------

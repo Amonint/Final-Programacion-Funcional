@@ -1,5 +1,6 @@
 const readline = require('readline-sync');
 const mysql = require('mysql');
+const fs = require('fs'); 
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -21,21 +22,29 @@ const autenticarUsuario = () => new Promise((resolve, reject) => {
   const querySelectSQL = `SELECT u.nombre, u.apellido, t.saldo FROM usuarios u INNER JOIN tarjetas t ON u.numeroTarjeta = t.numeroTarjeta WHERE u.numeroTarjeta = '${numeroTarjeta}' AND t.contrasena = ${contrasena}`;
   connection.query(querySelectSQL, (error, results) => {
     error ? reject('Error al verificar la tarjeta y la contraseña:', error)
-          : resolve(results.length > 0 ? { ...results[0], operacion, numeroTarjeta } : null);
+      : resolve(results.length > 0 ? { ...results[0], operacion, numeroTarjeta } : null);
   });
 });
 
 const solicitarMonto = (operacion) => parseFloat(solicitarInformacion(operacion === 'r' ? 'Ingrese el monto a retirar: ' : 'Ingrese el monto a depositar: '));
 
 const mostrarRecibo = (nombre, apellido, fecha, saldoAnterior, saldoNuevo) => {
-  const imprimirLinea = (etiqueta, valor) => console.log(`${etiqueta}: ${valor}`);
-  
-  console.log('\n----- Recibo de Transacción -----');
-  imprimirLinea('Nombre', `${nombre} ${apellido}`);
-  imprimirLinea('Fecha', fecha);
-  imprimirLinea('Saldo Anterior', `$${saldoAnterior.toFixed(2)}`);
-  imprimirLinea('Saldo Nuevo', `$${saldoNuevo.toFixed(2)}`);
-  console.log('--------------------------------\n');
+  const contenidoRecibo = `
+----- Recibo de Transacción -----
+Nombre: ${nombre} ${apellido}
+Fecha: ${fecha}
+Saldo Anterior: $${saldoAnterior.toFixed(2)}
+Saldo Nuevo: $${saldoNuevo.toFixed(2)}
+--------------------------------
+`;
+
+  // Escribir el contenido en un archivo de texto
+  // Escribir el contenido en un archivo de texto
+fs.writeFile('recibo.txt', contenidoRecibo, (err) => 
+err
+  ? console.error('Error al escribir el archivo:', err)
+  : console.log('Recibo generado exitosamente. Puedes encontrarlo en "recibo.txt"')
+);
 };
 
 const realizarOperacion = ({ operacion, numeroTarjeta, nombre, apellido, saldo }, monto) => {
@@ -77,8 +86,8 @@ const ejecutarCajero = () => {
     .catch((error) => console.error(error));
 };
 
-connection.connect((error) => 
-  error 
+connection.connect((error) =>
+  error
     ? (console.error('Error al conectar con la base de datos:', error), process.exit(1))
     : ejecutarCajero()
 );
