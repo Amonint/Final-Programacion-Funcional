@@ -1,0 +1,20 @@
+-- Insertar datos de ejemplo en la tabla de usuarios
+INSERT INTO usuarios (numeroTarjeta, nombre, apellido, dni)
+VALUES 
+  ('1234567890123456', 'Juan', 'Pérez', '12345678'),
+  ('2345678901234567', 'Ana', 'Gómez', '87654321'),
+  ('3456789012345678', 'Carlos', 'López', '56789012');
+
+-- Insertar datos de ejemplo en la tabla de tarjetas
+INSERT INTO tarjetas (numeroTarjeta, saldo, contrasena)
+VALUES 
+  ('1234567890123456', 1500.00, 1234),
+  ('2345678901234567', 2000.50, 5678),
+  ('3456789012345678', 100.00, 9876);
+
+-- Insertar datos de ejemplo en la tabla de movimientos
+INSERT INTO movimientos (numeroTarjeta, tipo, monto)
+VALUES 
+  ('1234567890123456', 'retiro', 100.00),
+  ('2345678901234567', 'deposito', 500.50),
+  ('3456789012345678', 'retiro', 50.00);

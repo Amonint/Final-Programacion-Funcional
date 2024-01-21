@@ -1,0 +1,26 @@
+-- Creación de la tabla de usuarios
+CREATE TABLE IF NOT EXISTS usuarios (
+  numeroTarjeta VARCHAR(16) PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  apellido VARCHAR(255) NOT NULL,
+  dni VARCHAR(20) NOT NULL,
+  -- Puedes agregar más campos según tus necesidades
+  UNIQUE KEY (dni)
+);
+
+-- Creación de la tabla de tarjetas
+CREATE TABLE IF NOT EXISTS tarjetas (
+  numeroTarjeta VARCHAR(16) PRIMARY KEY,
+  saldo DECIMAL(10, 2) NOT NULL,
+  contrasena INT NOT NULL
+);
+
+-- Creación de la tabla de movimientos
+CREATE TABLE IF NOT EXISTS movimientos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  numeroTarjeta VARCHAR(16),
+  tipo VARCHAR(10) NOT NULL, -- 'retiro' o 'deposito'
+  monto DECIMAL(10, 2) NOT NULL,
+  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (numeroTarjeta) REFERENCES tarjetas(numeroTarjeta)
+);
